@@ -84,7 +84,7 @@ fn main() {
     let position: String = matches.get_one::<String>("position").unwrap().to_string();
     let output: String = matches.get_one::<String>("output").unwrap().to_owned();
 
-    if res.is_err() {
+    if res.is_err() || env::var("MY_NAME").is_err() {
         let mut file = File::options()
             .append(true)
             .create(true)
