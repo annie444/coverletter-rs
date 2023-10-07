@@ -5,9 +5,8 @@ use clap::{
     },
     Arg, ColorChoice, Command, ValueHint,
 };
-use dotenv;
+use dotenvy;
 use home::home_dir;
-use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
@@ -22,7 +21,7 @@ fn main() {
     };
 
     home.push(".coverletter");
-    let res = dotenv::from_path(home.clone());
+    dotenvy::from_path(home.clone().as_path()).ok();
 
     let mut cmd = Command::new("coverletter")
         .author("Annie Ehler <annie.ehler.4@gmail.com>")
@@ -67,14 +66,16 @@ fn main() {
             .value_name("NAME")
             .short('n')
             .long("name")
-            .help("Your name for the cover letter")
+            .help("Your name for the cover letter. (This will be saved at ~/.coverletter so you only need to provide it once)")
             .env("MY_NAME"));
 
     let matches = cmd.clone().try_get_matches().unwrap_or_else(|e| e.exit());
 
+    println!("{:?}", dotenvy::vars().collect::<Vec<(String, String)>>());
+
     let name: String = match matches.get_one::<String>("name") {
         Some(n) => n.to_string(),
-        None => match env::var("MY_NAME") {
+        None => match dotenvy::var("MY_NAME") {
             Ok(n) => n.to_string(),
             Err(e) => panic!("Nothing is working! Who even are you!? : {}", e),
         },
@@ -84,13 +85,13 @@ fn main() {
     let position: String = matches.get_one::<String>("position").unwrap().to_string();
     let output: String = matches.get_one::<String>("output").unwrap().to_owned();
 
-    if res.is_err() || env::var("MY_NAME").is_err() {
+    if dotenvy::var("MY_NAME").is_err() {
         let mut file = File::options()
             .append(true)
             .create(true)
             .open(home.as_path())
             .expect("Unable to open ~/.coverletter file");
-        writeln!(&mut file, "MY_NAME={}", name).expect("Unable to write to ~/.coverletter file");
+        writeln!(&mut file, "MY_NAME='{}'", name).expect("Unable to write to ~/.coverletter file");
     }
 
     builder::build(name, company, location, position, output);
