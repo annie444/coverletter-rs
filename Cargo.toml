@@ -2,7 +2,14 @@
 name = "coverletter"
 version = "0.1.0"
 edition = "2021"
-
+authors = ["Annie Ehler <annie.ehler.4@gmail.com>"]
+license = "MIT OR Apache-2.0"
+description = "A tool to help you find a job"
+readme = "README.md"
+homepage = "https://github.com/annie444/coverletter"
+repository = "https://github.com/annie444/coverletter"
+keywords = ["cli", "jobs", "employment", "pdf", "help", "demo"]
+categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

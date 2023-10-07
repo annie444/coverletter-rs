@@ -6,7 +6,7 @@ use genpdf::{
 use image::io::Reader;
 use include_dir::{include_dir, Dir};
 use pdfshrink::gs_command;
-use std::env;
+
 use std::io::{self, Cursor, Write};
 use std::path::PathBuf;
 use tempfile;
