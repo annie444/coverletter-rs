@@ -71,8 +71,6 @@ fn main() {
 
     let matches = cmd.clone().try_get_matches().unwrap_or_else(|e| e.exit());
 
-    println!("{:?}", dotenvy::vars().collect::<Vec<(String, String)>>());
-
     let name: String = match matches.get_one::<String>("name") {
         Some(n) => n.to_string(),
         None => match dotenvy::var("MY_NAME") {
