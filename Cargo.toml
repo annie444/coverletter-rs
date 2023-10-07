@@ -13,11 +13,11 @@ categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = { version = "0.4.31", features = ["serde"] }
-clap = { version = "4.4.6", features = ["derive", "cargo", "env", "string", "unicode", "color"] }
+chrono = { version = "0.4.31" }
+clap = { version = "4.4.6", features = ["cargo", "env", "string", "unicode", "color"] }
 dotenv = { version = "0.15.0", features = ["clap", "cli"] }
 genpdf = { version = "0.2.0", features = ["hyphenation", "image", "images"] }
 image = "0.23.14"
-include_dir = { version = "0.7.3", features = ["glob", "metadata"] }
+include_dir = "0.7.3" 
 pdfshrink = "0.2.0"
 tempfile = "3.8.0"
