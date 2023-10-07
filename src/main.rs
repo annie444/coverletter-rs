@@ -21,7 +21,6 @@ fn main() {
     };
 
     home.push(".coverletter");
-    println!("{:?}", home.clone().as_os_str());
     let res = dotenv::from_path(home.clone());
 
     let mut cmd = Command::new("coverletter")

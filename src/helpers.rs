@@ -3,6 +3,5 @@ pub fn capitalize(s: &str) -> String {
     for c in s.chars() {
         f.push(c.to_ascii_uppercase());
     }
-    println!("{}", f.clone());
     f
 }
