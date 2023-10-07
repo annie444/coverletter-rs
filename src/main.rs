@@ -7,6 +7,7 @@ use clap::{
 };
 use dotenv;
 use home::home_dir;
+use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
@@ -71,7 +72,13 @@ fn main() {
 
     let matches = cmd.clone().try_get_matches().unwrap_or_else(|e| e.exit());
 
-    let name: String = matches.get_one::<String>("name").unwrap().to_string();
+    let name: String = match matches.get_one::<String>("name") {
+        Some(n) => n.to_string(),
+        None => match env::var("MY_NAME") {
+            Ok(n) => n.to_string(),
+            Err(e) => panic!("Nothing is working! Who even are you!? : {}", e),
+        },
+    };
     let company: String = matches.get_one::<String>("company").unwrap().to_string();
     let location: String = matches.get_one::<String>("location").unwrap().to_string();
     let position: String = matches.get_one::<String>("position").unwrap().to_string();

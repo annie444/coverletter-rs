@@ -1,6 +1,6 @@
 [package]
 name = "coverletter"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Annie Ehler <annie.ehler.4@gmail.com>"]
 license = "MIT OR Apache-2.0"
