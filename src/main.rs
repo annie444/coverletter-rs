@@ -6,16 +6,23 @@ use clap::{
     Arg, ColorChoice, Command, ValueHint,
 };
 use dotenv;
+use home::home_dir;
 use std::fs::File;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 mod builder;
 pub mod helpers;
 
 fn main() {
-    let my_path = Path::new("~/.coverletter");
-    let res = dotenv::from_path(my_path);
+    let mut home: PathBuf = match home_dir() {
+        Some(path) => path,
+        None => panic!("Impossible to get your home dir!"),
+    };
+
+    home.push(".coverletter");
+    println!("{:?}", home.clone().as_os_str());
+    let res = dotenv::from_path(home.clone());
 
     let mut cmd = Command::new("coverletter")
         .author("Annie Ehler <annie.ehler.4@gmail.com>")
@@ -69,13 +76,13 @@ fn main() {
     let company: String = matches.get_one::<String>("company").unwrap().to_string();
     let location: String = matches.get_one::<String>("location").unwrap().to_string();
     let position: String = matches.get_one::<String>("position").unwrap().to_string();
-    let output: PathBuf = matches.get_one::<PathBuf>("output").unwrap().to_owned();
+    let output: String = matches.get_one::<String>("output").unwrap().to_owned();
 
     if res.is_err() {
         let mut file = File::options()
             .append(true)
             .create(true)
-            .open(my_path)
+            .open(home.as_path())
             .expect("Unable to open ~/.coverletter file");
         writeln!(&mut file, "MY_NAME={}", name).expect("Unable to write to ~/.coverletter file");
     }

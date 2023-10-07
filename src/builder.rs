@@ -16,13 +16,13 @@ use crate::helpers;
 static FONTS_DIR: Dir<'_> = include_dir!("./fonts");
 static FILES_DIR: Dir<'_> = include_dir!("./static");
 
-pub fn build(name: String, company: String, location: String, position: String, out: PathBuf) {
+pub fn build(name: String, company: String, location: String, position: String, out: String) {
     let output: PathBuf;
 
     if !out.ends_with(".pdf") {
-        output = PathBuf::from(format!("{}.pdf", out.to_str().unwrap()).to_owned());
+        output = PathBuf::from(format!("{}.pdf", out).to_owned());
     } else {
-        output = out.to_owned();
+        output = PathBuf::from(out).to_owned();
     }
 
     // Load a font from the file system

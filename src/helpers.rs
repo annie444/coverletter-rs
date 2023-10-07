@@ -1,7 +1,8 @@
 pub fn capitalize(s: &str) -> String {
-    let mut c = s.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    let mut f = String::new();
+    for c in s.chars() {
+        f.push(c.to_ascii_uppercase());
     }
+    println!("{}", f.clone());
+    f
 }

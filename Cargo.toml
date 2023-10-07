@@ -17,6 +17,7 @@ chrono = { version = "0.4.31" }
 clap = { version = "4.4.6", features = ["cargo", "env", "string", "unicode", "color"] }
 dotenv = { version = "0.15.0", features = ["clap", "cli"] }
 genpdf = { version = "0.2.0", features = ["hyphenation", "image", "images"] }
+home = "0.5.5"
 image = "0.23.14"
 include_dir = "0.7.3" 
 pdfshrink = "0.2.0"
