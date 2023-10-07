@@ -8,7 +8,7 @@ description = "A tool to help you find a job"
 readme = "README.md"
 homepage = "https://github.com/annie444/coverletter"
 repository = "https://github.com/annie444/coverletter"
-keywords = ["cli", "jobs", "employment", "pdf", "help", "demo"]
+keywords = ["cli", "employment", "pdf", "help", "resume"]
 categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
