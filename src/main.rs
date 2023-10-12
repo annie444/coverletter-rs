@@ -3,6 +3,7 @@ use clap::{
         styling::{AnsiColor, Effects},
         Styles,
     },
+    error::{ContextKind, ContextValue, Error as ClapError, ErrorKind, Result},
     Arg, ColorChoice, Command, ValueHint,
 };
 use dotenvy;
@@ -14,7 +15,7 @@ use std::path::PathBuf;
 mod builder;
 pub mod helpers;
 
-fn main() {
+fn main() -> Result<(), ClapError> {
     let mut home: PathBuf = match home_dir() {
         Some(path) => path,
         None => panic!("Impossible to get your home dir!"),
@@ -25,7 +26,7 @@ fn main() {
 
     let mut cmd = Command::new("coverletter")
         .author("Annie Ehler <annie.ehler.4@gmail.com>")
-        .version("0.1") 
+        .version("0.1.4") 
         .about("A CLI program that builds a coverletter for any company or position") 
         .long_about(None)
         .display_name("coverletter")
@@ -76,13 +77,55 @@ fn main() {
         Some(n) => n.to_string(),
         None => match dotenvy::var("MY_NAME") {
             Ok(n) => n.to_string(),
-            Err(e) => panic!("Nothing is working! Who even are you!? : {}", e),
+            Err(_) => {
+                let mut err = ClapError::new(ErrorKind::MissingRequiredArgument).with_cmd(&cmd);
+                err.insert(ContextKind::InvalidArg, ContextValue::None);
+                err.insert(
+                    ContextKind::SuggestedArg,
+                    ContextValue::String("--name".to_string()),
+                );
+                err.insert(
+                    ContextKind::SuggestedValue,
+                    ContextValue::String("`Johnny Appleseed'".to_string()),
+                );
+                println!("Nothing is working! Who even are you!?");
+                let _ = err.print().expect("Error with the Error");
+                return Err(err);
+            }
         },
     };
-    let company: String = matches.get_one::<String>("company").unwrap().to_string();
-    let location: String = matches.get_one::<String>("location").unwrap().to_string();
+    let company: String = match matches.get_one::<String>("company") {
+        Some(co) => co.to_owned(),
+        None => {
+            let mut err = ClapError::new(ErrorKind::MissingRequiredArgument).with_cmd(&cmd);
+            err.insert(ContextKind::InvalidArg, ContextValue::None);
+            err.insert(
+                ContextKind::SuggestedArg,
+                ContextValue::String("--company".to_string()),
+            );
+            err.insert(
+                ContextKind::SuggestedValue,
+                ContextValue::String("`Monsters, Inc.'".to_string()),
+            );
+            let _ = err.print().expect("Error with the Error");
+            return Err(err);
+        }
+    };
+    let location: Option<String> = matches.get_one::<String>("location").cloned();
     let position: Option<String> = matches.get_one::<String>("position").cloned();
-    let output: String = matches.get_one::<String>("output").unwrap().to_owned();
+    let output: String = match matches.get_one::<String>("output") {
+        Some(output) => output.to_owned(),
+        None => {
+            let mut err = ClapError::new(ErrorKind::MissingRequiredArgument).with_cmd(&cmd);
+            err.insert(ContextKind::TrailingArg, ContextValue::None);
+            err.insert(
+                ContextKind::SuggestedArg,
+                ContextValue::String("./coverletter.pdf".to_string()),
+            );
+            let _ = err.print().expect("Error with the Error");
+            return Err(err);
+        }
+    };
 
     if dotenvy::var("MY_NAME").is_err() {
         let mut file = File::options()
@@ -95,5 +138,5 @@ fn main() {
 
     builder::build(name, company, location, position, output);
 
-    cmd.build()
+    Ok(cmd.build())
 }

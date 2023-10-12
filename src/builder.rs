@@ -19,7 +19,7 @@ static FILES_DIR: Dir<'_> = include_dir!("./static");
 pub fn build(
     name: String,
     company: String,
-    location: String,
+    location: Option<String>,
     position: Option<String>,
     out: String,
 ) {
@@ -154,9 +154,11 @@ pub fn build(
     let para = Paragraph::new(letter_head_to);
     layout.push(para);
 
-    let letter_head_at = format!("{}", location);
-    let para = Paragraph::new(letter_head_at);
-    layout.push(para);
+    if location.is_some() {
+        let letter_head_at = format!("{}", location.unwrap());
+        let para = Paragraph::new(letter_head_at);
+        layout.push(para);
+    }
 
     layout.push(Break::new(1));
 
