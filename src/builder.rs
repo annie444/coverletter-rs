@@ -16,7 +16,13 @@ use crate::helpers;
 static FONTS_DIR: Dir<'_> = include_dir!("./fonts");
 static FILES_DIR: Dir<'_> = include_dir!("./static");
 
-pub fn build(name: String, company: String, location: String, position: String, out: String) {
+pub fn build(
+    name: String,
+    company: String,
+    location: String,
+    position: Option<String>,
+    out: String,
+) {
     let output: PathBuf;
 
     if !out.ends_with(".pdf") {
@@ -160,7 +166,12 @@ pub fn build(name: String, company: String, location: String, position: String, 
 
     layout.push(Break::new(1));
 
-    let para1 = format!("I am writing to express my sincere interest in the {} opportunity to work at {}. My journey in the realm of machine learning and software engineering has ignited a deep passion for innovation and problem-solving. I am excited about the prospect of contributing to your dynamic team's achievements.", position, company.clone());
+    let role = match position {
+        Some(position) => format!("{} opportunity at", position),
+        None => "opportunity to work at".to_string(),
+    };
+
+    let para1 = format!("I am writing to express my sincere interest in the {} {}. My journey in the realm of machine learning and software engineering has ignited a deep passion for innovation and problem-solving. I am excited about the prospect of contributing to your dynamic team's achievements.", role, company.clone());
     let para = Paragraph::new(para1);
     layout.push(para);
 

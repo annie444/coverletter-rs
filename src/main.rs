@@ -56,6 +56,7 @@ fn main() {
             .visible_short_alias('r')
             .visible_alias("role")
             .value_name("POSITION")
+            .required(false)
             .help("The position you're applying to (leaving this blank will output a standard cover letter for any position)"))
         .arg(Arg::new("output")
             .value_name("OUTPUT")
@@ -80,7 +81,7 @@ fn main() {
     };
     let company: String = matches.get_one::<String>("company").unwrap().to_string();
     let location: String = matches.get_one::<String>("location").unwrap().to_string();
-    let position: String = matches.get_one::<String>("position").unwrap().to_string();
+    let position: Option<String> = matches.get_one::<String>("position").cloned();
     let output: String = matches.get_one::<String>("output").unwrap().to_owned();
 
     if dotenvy::var("MY_NAME").is_err() {
