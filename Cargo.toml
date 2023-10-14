@@ -15,10 +15,17 @@ categories = ["command-line-utilities"]
 [dependencies]
 chrono = { version = "0.4.31" }
 clap = { version = "4.4.6", features = ["cargo", "env", "string", "unicode", "color"] }
+color-print = "0.3.5"
+config = { version = "0.13.3", features = ["yaml"] }
 dotenvy = "0.15.7"
 genpdf = { version = "0.2.0", features = ["hyphenation", "image", "images"] }
 home = "0.5.5"
 image = "0.23.14"
 include_dir = "0.7.3" 
 pdfshrink = "0.2.0"
+reqwest = { version = "0.11.22", features = ["serde_json", "stream", "json", "cookies"] }
+serde = { version = "1.0.189", features = ["derive", "serde_derive"] }
+serde_json = "1.0.107"
+serde_yaml = "0.9.25"
 tempfile = "3.8.0"
+tokio = { version = "1.33.0", features = ["full"] }

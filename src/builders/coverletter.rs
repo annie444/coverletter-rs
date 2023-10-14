@@ -1,32 +1,28 @@
+use crate::builders::{FILES_DIR, FONTS_DIR};
 use chrono::Local;
 use genpdf::{
     elements::*, fonts, style, Alignment, Document, Element as _, Margins, PaperSize, Scale,
     SimplePageDecorator,
 };
 use image::io::Reader;
-use include_dir::{include_dir, Dir};
 use pdfshrink::gs_command;
-
 use std::io::{self, Cursor, Write};
-use std::path::PathBuf;
+use std::{ffi::OsStr, path::PathBuf};
 use tempfile;
 
 use crate::helpers;
-
-static FONTS_DIR: Dir<'_> = include_dir!("./fonts");
-static FILES_DIR: Dir<'_> = include_dir!("./static");
 
 pub fn build(
     name: String,
     company: String,
     location: Option<String>,
     position: Option<String>,
-    out: String,
+    out: PathBuf,
 ) {
     let output: PathBuf;
 
-    if !out.ends_with(".pdf") {
-        output = PathBuf::from(format!("{}.pdf", out).to_owned());
+    if !(out.extension().is_none() || out.extension() == Some(OsStr::new("pdf"))) {
+        output = PathBuf::from(format!("{}.pdf", out.display()).to_owned());
     } else {
         output = PathBuf::from(out).to_owned();
     }
